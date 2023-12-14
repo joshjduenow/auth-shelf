@@ -27,7 +27,21 @@ router.get('/', rejectUnauthenticated,(req, res) => { // put back rejectUnauthen
  * Add an item for the logged in user to the shelf
  */
 router.post('/', (req, res) => {
-  // endpoint functionality
+  console.log('POSTing the shelf url and description');
+  const insertShelfQuery = `
+    INSERT INTO "item"
+    ("description", "image_url", "user_id")
+      VALUES
+    ($1, $2, $3)
+  `
+  const insertShelfValues = [req.body.description, req.body.image_url, req.body.user_id];
+  pool.query(insertShelfQuery, insertShelfValues)
+    .then(result => {
+      res.sendStatus(201);
+    }).catch(err => {
+      console.log('ERROR in post (pool)', err);
+      res.sendStatus(500);
+    })
 });
 
 /**
