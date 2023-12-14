@@ -12,6 +12,7 @@ function LoginForm() {
     event.preventDefault();
 
     if (username && password) {
+      console.log("username & password:", username, password);
       dispatch({
         type: 'LOGIN',
         payload: {
