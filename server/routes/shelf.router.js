@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
+const { default: logger } = require('redux-logger');
 /**
  * Get all of the items on the shelf
  */
@@ -48,7 +49,24 @@ router.post('/', (req, res) => {
  * Delete an item if it's something the logged in user added
  */
 router.delete('/:id', (req, res) => {
-  // endpoint functionality
+  console.log('delte the shelf url and description');
+  console.log("req.body:", req.body);
+  console.log("req.params:", req.body, req.params);
+
+
+
+  const insertShelfQuery = `
+  DELETE FROM "item"
+  WHERE "user_id" = ${req.body.user_id} AND "id" = ${req.body.itemId};
+  `
+
+  pool.query(insertShelfQuery)
+    .then(result => {
+      res.sendStatus(201);
+    }).catch(err => {
+      console.log('ERROR in delete (pool)', err);
+      res.sendStatus(500);
+    })
 });
 
 /**

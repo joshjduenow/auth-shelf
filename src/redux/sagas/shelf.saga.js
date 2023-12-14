@@ -32,8 +32,29 @@ function* postShelfIds(action) {
       }
 }
 
+function* deleteImage(action) {
+    try {
+        console.log("action.payload", action.payload)
+        const shelfResponse = yield axios({
+            method: 'delete',
+            url: `/api/shelf/${action.payload.itemId}`,
+            data: action.payload
+        });
+        yield put({
+            type: 'SAGA_FETCH_SHELF'
+        });
+      } catch (error) {
+        console.log("error in delete shelf items:", error);
+      }
+}
+
+
+
+
+
 function* shelfSaga() {
     yield takeLatest('SAGA_FETCH_SHELF', getShelfItems);
     yield takeLatest('SAGA_POST_SHELF', postShelfIds);
+    yield takeLatest('SAGA_DELETE_SHELF', deleteImage);
   }
 export default shelfSaga;
